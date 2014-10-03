@@ -1,6 +1,9 @@
 package com.cs307.sesimicactivitymap;
 
 import javax.servlet.annotation.WebServlet;
+import com.vaadin.tapio.googlemaps.*;
+import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -34,6 +37,18 @@ public class SesimicactivitymapUI extends UI {
 			}
 		});
 		layout.addComponent(button);
+		
+		GoogleMap googleMap =  new GoogleMap(new LatLon(60.440963, 22.25122), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		googleMap.setSizeFull();
+		googleMap.addMarker("DRAGGABLE: Paavo Nurmi Stadion", new LatLon(
+		        60.442423, 22.26044), true, "VAADIN/1377279006_stadium.png");
+		GoogleMapMarker kakolaMarker = googleMap.addMarker("DRAGGABLE: Kakolan vankila",
+		        new LatLon(60.44291, 22.242415), true, null);
+		googleMap.addMarker("NOT DRAGGABLE: Iso-Heikkilä", new LatLon(
+		        60.450403, 22.230399), false, null);
+		googleMap.setMinZoom(4);
+		googleMap.setMaxZoom(16);
+		layout.addComponent(googleMap);
 	}
 
 }
