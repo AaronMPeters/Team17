@@ -32,6 +32,9 @@
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="&vaadin.version;" />
+			
+		<dependency org="com.vaadin.addon"   name="vaadin-charts"
+                rev="1.0.0"/>
 
 		<!-- Vaadin client side, needed for widget set compilation -->
 		<dependency org="com.vaadin" name="vaadin-client" rev="&vaadin.version;"
@@ -41,6 +44,6 @@
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
 			
-		<dependency org="com.vaadin.tapio" name="googlemaps" rev="0.5" />
+		<dependency org="com.vaadin.tapio" name="googlemaps" rev="0.9.0" />
 	</dependencies>
 </ivy-module>

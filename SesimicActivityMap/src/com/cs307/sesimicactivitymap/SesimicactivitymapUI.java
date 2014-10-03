@@ -20,7 +20,7 @@ import com.vaadin.ui.VerticalLayout;
 public class SesimicactivitymapUI extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = SesimicactivitymapUI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = SesimicactivitymapUI.class, widgetset = "com.cs307.sesimicactivitymap.widgetset.SesimicactivitymapWidgetset")
 	public static class Servlet extends VaadinServlet {
 	}
 
@@ -40,7 +40,6 @@ public class SesimicactivitymapUI extends UI {
 		
 		GoogleMap googleMap =  new GoogleMap(new LatLon(60.440963, 22.25122), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setSizeFull();
-		googleMap.setMin
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
 		layout.addComponent(googleMap);
