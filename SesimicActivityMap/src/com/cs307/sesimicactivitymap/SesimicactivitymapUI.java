@@ -1,10 +1,14 @@
 package com.cs307.sesimicactivitymap;
 
 import javax.servlet.annotation.WebServlet;
+
+import com.cs307.database.Sensor;
 import com.vaadin.tapio.googlemaps.*;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -12,6 +16,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -19,6 +24,9 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("sesimicactivitymap")
 public class SesimicactivitymapUI extends UI {
 
+	public static final String PERSISTENCE_UNIT = "SAM";
+	private JPAContainer<Sensor> sensors;
+	private Table sensorTable;
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = SesimicactivitymapUI.class, widgetset = "com.cs307.sesimicactivitymap.widgetset.SesimicactivitymapWidgetset")
 	public static class Servlet extends VaadinServlet {
@@ -29,7 +37,9 @@ public class SesimicactivitymapUI extends UI {
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		setContent(layout);
-
+		sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
+		sensorTable = new Table(null,sensors);
+		
 		Button button = new Button("Click Me");
 		button.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
@@ -37,7 +47,7 @@ public class SesimicactivitymapUI extends UI {
 			}
 		});
 		layout.addComponent(button);
-		
+		layout.addComponent(sensorTable);
 		GoogleMap googleMap =  new GoogleMap(new LatLon(60.440963, 22.25122), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setSizeFull();
 		googleMap.setMinZoom(4);
