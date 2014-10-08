@@ -48,10 +48,12 @@ public class SesimicactivitymapUI extends UI {
 		});
 		layout.addComponent(button);
 		layout.addComponent(sensorTable);
-		GoogleMap googleMap =  new GoogleMap(new LatLon(60.440963, 22.25122), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		GoogleMap googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setSizeFull();
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
+		GoogleMapMarker marker = new GoogleMapMarker("test", googleMap.getCenter(), false);
+		googleMap.addMarker(marker);
 		layout.addComponent(googleMap);
 	}
 
