@@ -24,9 +24,9 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("sesimicactivitymap")
 public class SesimicactivitymapUI extends UI {
 
-	public static final String PERSISTENCE_UNIT = "SAM";
-	private JPAContainer<Sensor> sensors;
-	private Table sensorTable;
+	//public static final String PERSISTENCE_UNIT = "SAM";
+	//private JPAContainer<Sensor> sensors;
+	//private Table sensorTable;
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = SesimicactivitymapUI.class, widgetset = "com.cs307.sesimicactivitymap.widgetset.SesimicactivitymapWidgetset")
 	public static class Servlet extends VaadinServlet {
@@ -37,8 +37,8 @@ public class SesimicactivitymapUI extends UI {
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		setContent(layout);
-		sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
-		sensorTable = new Table(null,sensors);
+	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
+	//	sensorTable = new Table(null,sensors);
 		
 		Button button = new Button("Click Me");
 		button.addClickListener(new Button.ClickListener() {
@@ -47,7 +47,7 @@ public class SesimicactivitymapUI extends UI {
 			}
 		});
 		layout.addComponent(button);
-		layout.addComponent(sensorTable);
+		//layout.addComponent(sensorTable);
 		GoogleMap googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setSizeFull();
 		googleMap.setMinZoom(4);
