@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import com.cs307.database.Sensor;
 import com.vaadin.tapio.googlemaps.*;
 import com.vaadin.tapio.googlemaps.client.LatLon;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -54,6 +55,8 @@ public class SesimicactivitymapUI extends UI {
 		googleMap.setMaxZoom(16);
 		GoogleMapMarker marker = new GoogleMapMarker("test", googleMap.getCenter(), false);
 		googleMap.addMarker(marker);
+		GoogleMapInfoWindow window = new GoogleMapInfoWindow ("Add a new infowindow", marker);
+		googleMap.openInfoWindow(window);
 		layout.addComponent(googleMap);
 	}
 
