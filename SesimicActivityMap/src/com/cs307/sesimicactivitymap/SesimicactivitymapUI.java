@@ -37,6 +37,8 @@ public class SesimicactivitymapUI extends UI {
 	protected void init(VaadinRequest request) {
 		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
+		layout.setSizeFull();
+		
 		setContent(layout);
 	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 	//	sensorTable = new Table(null,sensors);
@@ -47,7 +49,8 @@ public class SesimicactivitymapUI extends UI {
 				layout.addComponent(new Label("Thank you for clicking"));
 			}
 		});
-		layout.addComponent(button);
+		button.setHeight("20");
+		//layout.addComponent(button);
 		//layout.addComponent(sensorTable);
 		GoogleMap googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setSizeFull();
