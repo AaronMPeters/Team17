@@ -1,4 +1,4 @@
-package com.cs307.sesimicactivitymap;
+/*package com.cs307.sesimicactivitymap;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -16,6 +16,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
@@ -42,18 +43,26 @@ public class SesimicactivitymapUI extends UI {
 		setContent(layout);
 	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 	//	sensorTable = new Table(null,sensors);
+		HorizontalLayout buttons = new HorizontalLayout();
+
+		Button button1 = new Button("SeimicactivityMap");
+		Button button2 = new Button("EventsViewMap");
+		Button button3 = new Button("SensorViewMap");
+
+		button1.setWidth("100%");
+		button2.setWidth("100%");
+		button3.setWidth("100%");
+		buttons.addComponent(button1);		
+		buttons.addComponent(button2);
+		buttons.addComponent(button3);
+		buttons.setWidth("100%");
+		buttons.setHeight("100%");
+		layout.addComponent(buttons);
 		
-		Button button = new Button("Click Me");
-		button.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
-				layout.addComponent(new Label("Thank you for clicking"));
-			}
-		});
-		button.setHeight("20");
-		//layout.addComponent(button);
 		//layout.addComponent(sensorTable);
 		GoogleMap googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
-		googleMap.setSizeFull();
+		googleMap.setWidth("100%");
+		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
 		GoogleMapMarker marker = new GoogleMapMarker("test", googleMap.getCenter(), false);
@@ -61,6 +70,24 @@ public class SesimicactivitymapUI extends UI {
 		GoogleMapInfoWindow window = new GoogleMapInfoWindow ("Add a new infowindow", marker);
 		googleMap.openInfoWindow(window);
 		layout.addComponent(googleMap);
+		layout.setHeightUndefined();
+		final VerticalLayout layout2 = new VerticalLayout();
+		layout2.setSizeFull();
+		Button button1A = new Button("SeimicactivityMap");
+		Button button2A = new Button("EventsViewMap");
+		Button button3A = new Button("SensorViewMap");
+		layout2.setHeightUndefined();
+		layout2.addComponent(button1A);
+		layout2.addComponent(button2A);
+		layout2.addComponent(button3A);
+
+		button1.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(layout2);
+			}
+		});
+
+		
 	}
 
-}
+}*/
