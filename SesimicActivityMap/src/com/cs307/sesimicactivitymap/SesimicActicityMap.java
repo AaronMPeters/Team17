@@ -43,7 +43,13 @@ public class SesimicActicityMap {
 	public VerticalLayout getLayout() {
 		return layout;
 	}
-	public getButton() {
+	public Button getButton1() {
+		return this.button1;
 	}
+	public Button getButton2() {
+		return this.button2;
+	}
+	public Button getButton3() {
+		return this.button3;
 	}
 }

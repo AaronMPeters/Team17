@@ -38,11 +38,18 @@ public class MainPage extends UI {
 	protected void init(VaadinRequest request) {
 		
 		SesimicActicityMap first = new SesimicActicityMap();
+		final EventsViewMap second = new EventsViewMap();
+
 		setContent(first.getLayout());
 	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 	//	sensorTable = new Table(null,sensors);
 		
 		//layout.addComponent(sensorTable);
+		first.getButton1().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(second.getLayout());
+			}
+		});
 
 
 		
