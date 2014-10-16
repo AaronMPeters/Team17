@@ -88,6 +88,11 @@ public class SensorViewMap {
 			GoogleMapMarker sensor = new GoogleMapMarker("sensor_" + i, new LatLon(lats[i], longs[i]), false);
 			googleMap.addMarker(sensor);
 			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Add a new infowindow", sensor);
+			
+			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+	                googleMap, sensor, win);
+	        googleMap.addMarkerClickListener(infoWindowOpener);
+			
 		}		
 	}
 	public VerticalLayout getLayout() {

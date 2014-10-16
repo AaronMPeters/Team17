@@ -73,7 +73,7 @@ public class MainPage extends UI {
 		layout.setHeightUndefined();
 
 		button1.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
+			public void buttonClick(ClickEvent event) {				
 				SensorViewMap first = new SensorViewMap();
 				setContent(first.getLayout());
 			}
