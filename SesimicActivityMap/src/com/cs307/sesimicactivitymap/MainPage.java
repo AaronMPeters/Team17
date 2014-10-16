@@ -36,48 +36,14 @@ public class MainPage extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		final VerticalLayout layout = new VerticalLayout();
-		layout.setMargin(true);
-		layout.setSizeFull();
 		
-		setContent(layout);
+		SesimicActicityMap first = new SesimicActicityMap();
+		setContent(first.getLayout());
 	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 	//	sensorTable = new Table(null,sensors);
-		HorizontalLayout buttons = new HorizontalLayout();
-
-		Button button1 = new Button("SeimicactivityMap");
-		Button button2 = new Button("EventsViewMap");
-		Button button3 = new Button("SensorViewMap");
-
-		button1.setWidth("100%");
-		button2.setWidth("100%");
-		button3.setWidth("100%");
-		buttons.addComponent(button1);		
-		buttons.addComponent(button2);
-		buttons.addComponent(button3);
-		buttons.setWidth("100%");
-		buttons.setHeight("100%");
-		layout.addComponent(buttons);
 		
 		//layout.addComponent(sensorTable);
-		GoogleMap googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
-		googleMap.setWidth("100%");
-		googleMap.setHeight("400px");
-		googleMap.setMinZoom(4);
-		googleMap.setMaxZoom(16);
-		GoogleMapMarker marker = new GoogleMapMarker("test", googleMap.getCenter(), false);
-		googleMap.addMarker(marker);
-		GoogleMapInfoWindow window = new GoogleMapInfoWindow ("Add a new infowindow", marker);
-		googleMap.openInfoWindow(window);
-		layout.addComponent(googleMap);
-		layout.setHeightUndefined();
 
-		button1.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {				
-				SensorViewMap first = new SensorViewMap();
-				setContent(first.getLayout());
-			}
-		});
 
 		
 	}

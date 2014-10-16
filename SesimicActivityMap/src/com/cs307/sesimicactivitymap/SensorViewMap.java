@@ -23,9 +23,9 @@ public class SensorViewMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("TestSeimicactivityMap");
-		this.button2 = new Button("TestEventsViewMap");
-		this.button3 = new Button("TestSensorViewMap");
+		this.button1 = new Button("TestSeimicactivityMap3");
+		this.button2 = new Button("TestEventsViewMap3");
+		this.button3 = new Button("TestSensorViewMap3");
 		button1.setWidth("100%");
 		button2.setWidth("100%");
 		button3.setWidth("100%");
