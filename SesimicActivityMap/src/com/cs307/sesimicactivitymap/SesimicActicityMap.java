@@ -19,10 +19,44 @@ public class SesimicActicityMap {
 	Button button1;
 	Button button2;
 	Button button3;
+	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
+	private int polyCount = 0;
+	
+	//Create a generic colored polygon on the map
+	//around a center point
+	public void makePoly(double lat, double lon, double mag){
+		polyCount++;
+		double offset = mag*.4 + .5; //scaled for aesthetics <3
+		ArrayList<LatLon> points = new ArrayList<LatLon>();
+		points.add(new LatLon(lat, lon-offset));
+		points.add(new LatLon(lat+offset, lon));
+		points.add(new LatLon(lat, lon+offset));
+		points.add(new LatLon(lat-offset, lon));
+		points.add(new LatLon(lat, lon-offset));
+		GoogleMapPolygon poly = new GoogleMapPolygon(points);
+		if(mag<=0){
+			poly.setFillColor("#0000FF");
+			poly.setStrokeColor("#0000FF");
+		} else if(mag<=3){
+			poly.setFillColor("#00FF00");
+			poly.setStrokeColor("#00FF00");
+		} else if(mag<=7){
+			poly.setFillColor("#FFFF00");
+			poly.setStrokeColor("#FFFF00");
+		} else{
+			poly.setFillColor("#FF0000");
+			poly.setStrokeColor("#FF0000");
+		}
+		poly.setFillOpacity(.35);
+		poly.setStrokeOpacity(.8);
+		googleMap.addPolygonOverlay(poly);
+		polygons.add(poly);
+	}
+	
 	public SesimicActicityMap (){
 		this.layout = new VerticalLayout();
 		this.buttons = new HorizontalLayout();
-		this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setWidth("100%");
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
@@ -43,38 +77,11 @@ public class SesimicActicityMap {
 		layout.setSizeFull();
 		layout.setHeightUndefined();
 		
-		//A few fake map zones in order to demonstrate color filling
-				//
-				//San Francisco area
-				ArrayList<LatLon> sfcoords = new ArrayList<LatLon>();
-				sfcoords.add(new LatLon(36.4, -121.6));
-				sfcoords.add(new LatLon(37.1, -122.3));
-				sfcoords.add(new LatLon(38.4, -123.0));
-				sfcoords.add(new LatLon(37.8, -120.0));
-				sfcoords.add(new LatLon(36.7, -119.8));
-				sfcoords.add(new LatLon(36.4, -121.6));
-				
-				GoogleMapPolygon sanfran = new GoogleMapPolygon(sfcoords);
-				sanfran.setFillColor("#FF0000");
-				sanfran.setFillOpacity(.35);
-				sanfran.setStrokeColor("#FF0000");
-				sanfran.setStrokeOpacity(.8);
-				googleMap.addPolygonOverlay(sanfran);
-				
-				//Midwest area
-				ArrayList<LatLon> mwcoords = new ArrayList<LatLon>();
-				mwcoords.add(new LatLon(43, -103));
-				mwcoords.add(new LatLon(41, -93));
-				mwcoords.add(new LatLon(36, -91));
-				mwcoords.add(new LatLon(37, -102));
-				mwcoords.add(new LatLon(43, -103));
-				
-				GoogleMapPolygon midwest = new GoogleMapPolygon(mwcoords);
-				midwest.setFillColor("#00FF00");
-				midwest.setFillOpacity(.35);
-				midwest.setStrokeColor("#00FF00");
-				midwest.setStrokeOpacity(.8);
-				googleMap.addPolygonOverlay(midwest);
+		//Make a few map zones to demonstrate awesome new function
+		makePoly(40.0, -86.0, 0);
+		makePoly(36.0, -120.0, 10);
+		makePoly(41.0, -74.0, 4.3);
+		
 	}
 	public VerticalLayout getLayout() {
 		return layout;
