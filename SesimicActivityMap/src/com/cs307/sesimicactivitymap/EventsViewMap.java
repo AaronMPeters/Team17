@@ -8,6 +8,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.*;
 public class EventsViewMap {
 	VerticalLayout layout;
 	HorizontalLayout buttons;
@@ -38,7 +39,53 @@ public class EventsViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
-	
+		
+		double [] lat = {
+				34.50399, 
+				47.60657, 
+				30.2240747, 
+				42.652016, 
+				41.139455, 
+				35.084623, 
+				41.878247, 
+				37.7756, 
+				46.003962, 
+				40.807084, 
+				44.519358, 
+				21.30891, 
+
+			
+		};
+		double [] lon = {
+				-96.94965,
+				-122.33180,
+				-92.0198637,
+				-73.755054,
+				-104.821064,
+				-106.651178,
+				-87.629767,
+				-122.4193,
+				-112.534456,
+				-96.682386,
+				-88.019972,
+				-157.85752
+		};
+		
+		GoogleMapMarker [] seisEvents = new GoogleMapMarker[12];
+		Random rn = new Random();
+		for(int i = 0; i < 12; i++){
+			int rating = rn.nextInt(10) + 1;
+			seisEvents[i] = new GoogleMapMarker(Integer.toString(rating), new LatLon(lat[i], lon[i]), false);
+			googleMap.addMarker(seisEvents[i]);
+			
+			//GoogleMapMarker sensor = new GoogleMapMarker("sensor_" + i, new LatLon(lats[i], longs[i]), false);
+			//googleMap.addMarker(sensor);
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", seisEvents[i]);
+			
+			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+	                googleMap, seisEvents[i], win);
+	        googleMap.addMarkerClickListener(infoWindowOpener);
+		}
 	}
 	public VerticalLayout getLayout() {
 		return layout;
