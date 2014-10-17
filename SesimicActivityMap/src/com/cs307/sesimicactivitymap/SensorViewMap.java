@@ -23,9 +23,9 @@ public class SensorViewMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("TestSeimicactivityMap3");
-		this.button2 = new Button("TestEventsViewMap3");
-		this.button3 = new Button("TestSensorViewMap3");
+		this.button1 = new Button("SeimicActivityMap3");
+		this.button2 = new Button("EventsViewMap3");
+		this.button3 = new Button("SensorViewMap3");
 		button1.setWidth("100%");
 		button2.setWidth("100%");
 		button3.setWidth("100%");
@@ -97,5 +97,14 @@ public class SensorViewMap {
 	}
 	public VerticalLayout getLayout() {
 		return layout;
+	}
+	public Button getButton1() {
+		return this.button1;
+	}
+	public Button getButton2() {
+		return this.button2;
+	}
+	public Button getButton3() {
+		return this.button3;
 	}
 }

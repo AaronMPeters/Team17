@@ -27,9 +27,9 @@ public class SesimicActicityMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("EventsSeimicactivityMap1");
-		this.button2 = new Button("EventsEventsViewMap1");
-		this.button3 = new Button("EventsSensorViewMap1");
+		this.button1 = new Button("SeimicActivityMap1");
+		this.button2 = new Button("EventsViewMap1");
+		this.button3 = new Button("SensorViewMap1");
 		button1.setWidth("100%");
 		button2.setWidth("100%");
 		button3.setWidth("100%");
