@@ -2,6 +2,7 @@ package com.cs307.sesimicactivitymap;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.cs307.database.Sensor;
 import com.vaadin.tapio.googlemaps.*;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -36,20 +37,62 @@ public class MainPage extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		
-		SesimicActicityMap first = new SesimicActicityMap();
+		final SesimicActicityMap first = new SesimicActicityMap();
 		final EventsViewMap second = new EventsViewMap();
+		final SensorViewMap third = new SensorViewMap();
 
 		setContent(first.getLayout());
 	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 	//	sensorTable = new Table(null,sensors);
 		
 		//layout.addComponent(sensorTable);
+		
+		
 		first.getButton1().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(first.getLayout());
+			}
+		});
+		first.getButton2().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(second.getLayout());
 			}
 		});
-
+		first.getButton3().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(third.getLayout());
+			}
+		});
+		second.getButton1().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(first.getLayout());
+			}
+		});
+		second.getButton2().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(second.getLayout());
+			}
+		});
+		second.getButton3().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(third.getLayout());
+			}
+		});
+		third.getButton1().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(first.getLayout());
+			}
+		});
+		third.getButton2().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(second.getLayout());
+			}
+		});
+		third.getButton3().addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				setContent(third.getLayout());
+			}
+		});
 
 		
 	}
