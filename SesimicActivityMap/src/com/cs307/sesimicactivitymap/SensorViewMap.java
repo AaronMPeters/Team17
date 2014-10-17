@@ -1,5 +1,8 @@
 package com.cs307.sesimicactivitymap;
 
+import com.cs307.database.Sensor;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -9,6 +12,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 public class SensorViewMap {
+	public static final String PERSISTENCE_UNIT = "SAM";
+	private JPAContainer<Sensor> sensors;
 	VerticalLayout layout;
 	HorizontalLayout buttons;
 	GoogleMap googleMap;
@@ -23,12 +28,12 @@ public class SensorViewMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("Seimic Activity Map");
-		this.button2 = new Button("Events View Map");
-		this.button3 = new Button("Sensor View Map");
-		//button1.setWidth("100%");
-		//button2.setWidth("100%");
-		//button3.setWidth("100%");
+		this.button1 = new Button("TestSeimicactivityMap3");
+		this.button2 = new Button("TestEventsViewMap3");
+		this.button3 = new Button("TestSensorViewMap3");
+		button1.setWidth("100%");
+		button2.setWidth("100%");
+		button3.setWidth("100%");
 		buttons.addComponent(button1);		
 		buttons.addComponent(button2);
 		buttons.addComponent(button3);
@@ -38,6 +43,7 @@ public class SensorViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
+		//sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 		
 		double[] lats = {	
 				51.882,
@@ -97,14 +103,5 @@ public class SensorViewMap {
 	}
 	public VerticalLayout getLayout() {
 		return layout;
-	}
-	public Button getButton1() {
-		return this.button1;
-	}
-	public Button getButton2() {
-		return this.button2;
-	}
-	public Button getButton3() {
-		return this.button3;
 	}
 }
