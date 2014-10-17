@@ -24,12 +24,12 @@ public class EventsViewMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("SeimicActivityMap2");
-		this.button2 = new Button("EventsViewMap2");
-		this.button3 = new Button("SensorViewMap2");
-		button1.setWidth("100%");
-		button2.setWidth("100%");
-		button3.setWidth("100%");
+		this.button1 = new Button("Seimic Activity Map");
+		this.button2 = new Button("Events View Map");
+		this.button3 = new Button("Sensor View Map");
+		//button1.setWidth("100%");
+		//button2.setWidth("100%");
+		//button3.setWidth("100%");
 		buttons.addComponent(button1);		
 		buttons.addComponent(button2);
 		buttons.addComponent(button3);
