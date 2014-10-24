@@ -2,6 +2,7 @@ package com.cs307.sesimicactivitymap;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.cs307.database.Seismic_Events;
 import com.cs307.database.Sensor;
 import com.vaadin.tapio.googlemaps.*;
 import com.vaadin.tapio.googlemaps.client.LatLon;
@@ -26,8 +27,9 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("sesimicactivitymap")
 public class MainPage extends UI {
 
-	//public static final String PERSISTENCE_UNIT = "SAM";
-	//private JPAContainer<Sensor> sensors;
+	public static final String PERSISTENCE_UNIT = "SAM";
+	private JPAContainer<Sensor> sensors;
+	private JPAContainer<Seismic_Events> events;
 	//private Table sensorTable;
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = MainPage.class, widgetset = "com.cs307.sesimicactivitymap.widgetset.SesimicactivitymapWidgetset")
@@ -37,12 +39,14 @@ public class MainPage extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		
+		sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
+		events =  JPAContainerFactory.make(Seismic_Events.class, PERSISTENCE_UNIT);
 		final SesimicActicityMap first = new SesimicActicityMap();
 		final EventsViewMap second = new EventsViewMap();
-		final SensorViewMap third = new SensorViewMap();
-
+		final SensorViewMap third = new SensorViewMap(sensors);
+		//System.out.println(sensors.geti);
 		setContent(first.getLayout());
-	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
+		
 	//	sensorTable = new Table(null,sensors);
 		
 		//layout.addComponent(sensorTable);

@@ -1,8 +1,12 @@
 package com.cs307.sesimicactivitymap;
 
+import java.util.Iterator;
+
+import com.cs307.database.Seismic_Events;
 import com.cs307.database.Sensor;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.data.Item;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -12,15 +16,15 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 public class SensorViewMap {
-	public static final String PERSISTENCE_UNIT = "SAM";
-	private JPAContainer<Sensor> sensors;
+	//public static final String PERSISTENCE_UNIT = "SAM";
+	private JPAContainer<?> sensors;
 	VerticalLayout layout;
 	HorizontalLayout buttons;
 	GoogleMap googleMap;
 	Button button1;
 	Button button2;
 	Button button3;
-	public SensorViewMap (){
+	public SensorViewMap (JPAContainer<?> sensors){
 		this.layout = new VerticalLayout();
 		this.buttons = new HorizontalLayout();
 		this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
@@ -28,6 +32,7 @@ public class SensorViewMap {
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
+		this.sensors = sensors;
 		this.button1 = new Button("Seimic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
@@ -43,7 +48,7 @@ public class SensorViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
-		//sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
+	//	sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 		
 		double[] lats = {	
 				51.882,
@@ -89,7 +94,26 @@ public class SensorViewMap {
 				-86.294,
 				-87.83
 		};
-
+		int item;
+		System.out.println(sensors.getItemIds());
+		Iterator<Object> o = sensors.getItemIds().iterator();
+		while(o.hasNext()){
+			item = (Integer) o.next();
+			Item item2 = sensors.getItem(item);
+			double latitude = (Double) item2.getItemProperty("latitude").getValue();
+			double longitdue = (Double) item2.getItemProperty("longitude").getValue();
+			//System.out.println(latitude);
+			GoogleMapMarker sensor = new GoogleMapMarker("sensor_" +(Integer)item2.getItemProperty("id").getValue(), new LatLon(latitude,longitdue),false);
+			googleMap.addMarker(sensor);
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Add a new infowindow", sensor);
+			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+	                googleMap, sensor, win);
+	        googleMap.addMarkerClickListener(infoWindowOpener);
+			
+			
+			
+		}
+		/*
 		for (int i = 0; i < lats.length; i++){
 			GoogleMapMarker sensor = new GoogleMapMarker("sensor_" + i, new LatLon(lats[i], longs[i]), false);
 			googleMap.addMarker(sensor);
@@ -99,7 +123,8 @@ public class SensorViewMap {
 	                googleMap, sensor, win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);
 			
-		}		
+		}	
+		*/	
 	}
 	public VerticalLayout getLayout() {
 		return layout;

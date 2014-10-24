@@ -11,9 +11,9 @@
     <properties>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://localhost/SAM?useUnicode=yes&amp;characterEncoding=UTF-8" />
-      <property name="javax.persistence.jdbc.user" value="root" />
-      <property name="javax.persistence.jdbc.password" value="12345" />
+        value="jdbc:mysql://cs307-team17.cwsy85jjc2gd.us-west-2.rds.amazonaws.com:3306/SAM" />
+      <property name="javax.persistence.jdbc.user" value="Team17" />
+      <property name="javax.persistence.jdbc.password" value="12345678" />
 
       <!-- EclipseLink should create the database schema automatically -->
       <property name="eclipselink.ddl-generation" value="create-tables" />
