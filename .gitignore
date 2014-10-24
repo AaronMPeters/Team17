@@ -7,3 +7,6 @@
 *.DS_Store
 *.swp
 *.out
+
+## ignore local permission file
+*.pem
