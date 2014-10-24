@@ -27,7 +27,7 @@ public class SensorViewMap {
 	public SensorViewMap (JPAContainer<?> sensors){
 		this.layout = new VerticalLayout();
 		this.buttons = new HorizontalLayout();
-		this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setWidth("100%");
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);

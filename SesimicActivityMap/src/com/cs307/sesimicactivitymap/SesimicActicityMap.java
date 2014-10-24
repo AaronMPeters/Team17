@@ -1,7 +1,6 @@
 package com.cs307.sesimicactivitymap;
 
 import java.util.ArrayList;
-
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -22,28 +21,41 @@ public class SesimicActicityMap {
 	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
 	private int polyCount = 0;
 	
-	//Create a generic colored polygon on the map
-	//around a center point
+	/*
+	 * Draw a colored polygon to the map
+	 * 
+	 * @param lat the center point latitude
+	 * @param lon the center point longitude
+	 * @param mag the magnitude of the event
+	 */
 	public void makePoly(double lat, double lon, double mag){
 		polyCount++;
-		double offset = mag*.4 + .5; //scaled for aesthetics <3
+		double trig = 0.70710678118;	//equivalent to cos(45) and sin(45)
+		double r = mag*.4 + .5;	//radius determined by magnitude
 		ArrayList<LatLon> points = new ArrayList<LatLon>();
-		points.add(new LatLon(lat, lon-offset));
-		points.add(new LatLon(lat+offset, lon));
-		points.add(new LatLon(lat, lon+offset));
-		points.add(new LatLon(lat-offset, lon));
-		points.add(new LatLon(lat, lon-offset));
+		points.add(new LatLon(lat, lon+r));					//0 top
+		points.add(new LatLon(lat+trig*r, lon+trig*r));		//1 upper right
+		points.add(new LatLon(lat+r, lon));					//2 right
+		points.add(new LatLon(lat+trig*r, lon-trig*r));		//3 lower right
+		points.add(new LatLon(lat, lon-r));					//4 bottom
+		points.add(new LatLon(lat-trig*r, lon-trig*r));		//5 lower left
+		points.add(new LatLon(lat-r, lon));					//6 left
+		points.add(new LatLon(lat-trig*r, lon+trig*r));		//7 upper left
 		GoogleMapPolygon poly = new GoogleMapPolygon(points);
 		if(mag<=0){
+			//sets colors to blue
 			poly.setFillColor("#0000FF");
 			poly.setStrokeColor("#0000FF");
 		} else if(mag<=3){
+			//sets colors to green
 			poly.setFillColor("#00FF00");
 			poly.setStrokeColor("#00FF00");
 		} else if(mag<=7){
+			//sets colors to yellow
 			poly.setFillColor("#FFFF00");
 			poly.setStrokeColor("#FFFF00");
 		} else{
+			//sets colors to red
 			poly.setFillColor("#FF0000");
 			poly.setStrokeColor("#FF0000");
 		}
@@ -81,6 +93,7 @@ public class SesimicActicityMap {
 		makePoly(40.0, -86.0, 0);
 		makePoly(36.0, -120.0, 10);
 		makePoly(41.0, -74.0, 4.3);
+		makePoly(32.76, -96.79, 7.0);
 		
 	}
 	public VerticalLayout getLayout() {

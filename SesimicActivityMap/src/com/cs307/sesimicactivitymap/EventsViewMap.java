@@ -27,7 +27,7 @@ public class EventsViewMap {
 		this.layout = new VerticalLayout();
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
-		this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		//this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		this.button1 = new Button("Seimic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
@@ -43,6 +43,8 @@ public class EventsViewMap {
 		sliderarea.setWidth("100%");
 		sliderbar.setOrientation(SliderOrientation.HORIZONTAL);
 		sliderbar.setWidth("100%");
+		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+
 		googleMap.setWidth("100%");
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
