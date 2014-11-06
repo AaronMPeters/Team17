@@ -46,7 +46,7 @@ public class SensorViewMap {
 		layout.setHeightUndefined();
 
 		int item;
-		System.out.println(sensors.getItemIds());
+		//System.out.println(sensors.getItemIds());
 		Iterator<Object> o = sensors.getItemIds().iterator();
 		while(o.hasNext()){
 			item = (Integer) o.next();
@@ -55,7 +55,10 @@ public class SensorViewMap {
 			double longitdue = (Double) item2.getItemProperty("longitude").getValue();
 			GoogleMapMarker sensor = new GoogleMapMarker("sensor_" +(Integer)item2.getItemProperty("id").getValue(), new LatLon(latitude,longitdue),false);
 			googleMap.addMarker(sensor);
-			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Add a new infowindow", sensor);
+			String name = (String) item2.getItemProperty("name").getValue();
+			String depth = (String) item2.getItemProperty("depth").getValue();
+			
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Name:"+name+"\n"+"elevation:"+depth, sensor);
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, sensor, win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);

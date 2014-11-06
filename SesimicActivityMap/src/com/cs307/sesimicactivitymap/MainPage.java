@@ -42,7 +42,7 @@ public class MainPage extends UI {
 		sensors = JPAContainerFactory.make(Sensor.class, PERSISTENCE_UNIT);
 		events =  JPAContainerFactory.make(Seismic_Events.class, PERSISTENCE_UNIT);
 		final SesimicActicityMap first = new SesimicActicityMap();
-		final EventsViewMap second = new EventsViewMap();
+		final EventsViewMap second = new EventsViewMap(events);
 		final SensorViewMap third = new SensorViewMap(sensors);
 		//System.out.println(sensors.geti);
 		setContent(first.getLayout());

@@ -1,6 +1,8 @@
 package com.cs307.sesimicactivitymap;
 
 import com.vaadin.shared.ui.slider.SliderOrientation;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Item;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -26,8 +28,10 @@ public class EventsViewMap {
 	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
 
 
-	public EventsViewMap (){
+	private JPAContainer<?> events;
+	public EventsViewMap (JPAContainer<?> events){
 		this.layout = new VerticalLayout();
+		this.events = events;
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
 		this.button1 = new Button("Seimic Activity Map");
@@ -93,7 +97,34 @@ public class EventsViewMap {
 				-88.019972,
 				-157.85752
 		};
+		/*
+		int item;
+		Iterator<Object> o = events.getItemIds().iterator();
+		while(o.hasNext()){
 		
+			item = (Integer) o.next();
+			System.out.println(item);
+			Item item2 = events.getItem(item);
+			String in = (String) item2.getItemProperty("intensity").getValue();
+			double intensity = Double.parseDouble(in);
+			if(intensity>2){
+			double latitude = (Double) item2.getItemProperty("latitude").getValue();
+			double longitude = (Double) item2.getItemProperty("longitude").getValue();
+			GoogleMapMarker  event = new GoogleMapMarker("events_"+(Integer)item2.getItemProperty("id").getValue(),new LatLon(latitude,longitude),false);
+			googleMap.addMarker(event);
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", event);
+			
+			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+	                googleMap, event, win);
+	        googleMap.addMarkerClickListener(infoWindowOpener);
+			}
+			if(item==500){
+				break;
+			}
+			
+		}
+		*/
+		/*
 		GoogleMapMarker [] seisEvents = new GoogleMapMarker[12];
 		Random rn = new Random();
 		for(int i = 0; i < 12; i++){
@@ -107,8 +138,9 @@ public class EventsViewMap {
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, seisEvents[i], win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);
-		}
+		}*/
 	}
+	
 	public void makePoly(double lat, double lon, double mag){
 		double trig = 0.70710678118;	//equivalent to cos(45) and sin(45)
 		double r = mag*.4 + .5;	//radius determined by magnitude
@@ -144,6 +176,7 @@ public class EventsViewMap {
 		googleMap.addPolygonOverlay(poly);
 		polygons.add(poly);
 	}
+
 	public VerticalLayout getLayout() {
 		return layout;
 	}
