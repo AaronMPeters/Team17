@@ -42,16 +42,24 @@ public class SesimicActicityMap {
 		points.add(new LatLon(lat-r, lon));					//6 left
 		points.add(new LatLon(lat-trig*r, lon+trig*r));		//7 upper left
 		GoogleMapPolygon poly = new GoogleMapPolygon(points);
-		int red, green;
-		if(mag < 3) red = 0;
-		else 		red = (int)((mag-3)*255/7);
-		if(mag > 7) green = 0;
-		else 		green = 255 - red;
+		int red, green, blue;
+		red = 255;
+		green = 255;
+		blue = 0;
+		if (mag >= 3 && mag < 6.5)	{
+			red = (int) ((double)(mag - 3) * 255 / 3.5);
+		} else if (mag >= 6.5){
+			green = (int)((double)(10 - mag) * 255 / 3.5) ;
+		} else {
+			red = (int) (mag) * 255 / 3;
+			green = (int) (mag) * 255 / 3;
+			blue = 255;
+		}
 		String color = "#";
 		color = (red == 0) ? color.concat("00") : color.concat(Integer.toHexString(red));
 		color = (green == 0) ? color.concat("00") : color.concat(Integer.toHexString(green));
-		color = color.concat("00");
-		System.out.println("Color for polygon[" + polyCount + "], is " + color);
+		color = (blue == 0) ? color.concat("00"): color.concat(Integer.toHexString(blue));
+		System.out.println("Color for polygon[" + polyCount + "], is " + color + " " + red + " " + green);
 		poly.setFillColor(color);
 		poly.setStrokeColor(color);
 		poly.setFillOpacity(.35);
@@ -91,6 +99,8 @@ public class SesimicActicityMap {
 		makePoly(38.0, -90.0, 5);
 		makePoly(32.76, -96.79, 7.0);
 		makePoly(44.3, -110.2, 6.7);
+		makePoly(41.0, -86.0, 1);
+		makePoly(42.0, -86.0, 2);
 		
 	}
 	public VerticalLayout getLayout() {
