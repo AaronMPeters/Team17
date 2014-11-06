@@ -5,6 +5,7 @@ import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
+import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -22,18 +23,18 @@ public class EventsViewMap {
 	Button button3;
 	Slider sliderbar;
 	Button sliderbutton;
-	//CustomLayout custom;
+	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
+
+
 	public EventsViewMap (){
 		this.layout = new VerticalLayout();
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
-		//this.googleMap =  new GoogleMap(new LatLon(40.424318, -86.912367), "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		this.button1 = new Button("Seimic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
 		this.sliderbutton = new Button ("Filter");
 		this.sliderbar = new Slider(1, 10000);
-		//this.custom = new CustomLayout("SeismicEventsViewButtonLayout");
 		
 		button1.setHeight("100%");
 		button2.setHeight("100%");
@@ -51,7 +52,6 @@ public class EventsViewMap {
 		googleMap.setMaxZoom(16);
 		sliderarea.addComponent(sliderbar);
 		sliderarea.addComponent(sliderbutton);
-		//custom.addComponent(sliderbar, "username");
 		buttons.addComponent(button1);		
 		buttons.addComponent(button2);
 		buttons.addComponent(button3);
@@ -59,7 +59,6 @@ public class EventsViewMap {
 		buttons.setWidth("100%");
 		layout.addComponent(buttons);
 		layout.addComponent(googleMap);
-		//layout.addComponent(custom);
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
@@ -101,15 +100,49 @@ public class EventsViewMap {
 			int rating = rn.nextInt(10) + 1;
 			seisEvents[i] = new GoogleMapMarker(Integer.toString(rating), new LatLon(lat[i], lon[i]), false);
 			googleMap.addMarker(seisEvents[i]);
-			
-			//GoogleMapMarker sensor = new GoogleMapMarker("sensor_" + i, new LatLon(lats[i], longs[i]), false);
-			//googleMap.addMarker(sensor);
+			makePoly (lat[i], lon[i], 2);
+
 			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", seisEvents[i]);
 			
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, seisEvents[i], win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);
 		}
+	}
+	public void makePoly(double lat, double lon, double mag){
+		double trig = 0.70710678118;	//equivalent to cos(45) and sin(45)
+		double r = mag*.4 + .5;	//radius determined by magnitude
+		ArrayList<LatLon> points = new ArrayList<LatLon>();
+		points.add(new LatLon(lat, lon+r));					//0 top
+		points.add(new LatLon(lat+trig*r, lon+trig*r));		//1 upper right
+		points.add(new LatLon(lat+r, lon));					//2 right
+		points.add(new LatLon(lat+trig*r, lon-trig*r));		//3 lower right
+		points.add(new LatLon(lat, lon-r));					//4 bottom
+		points.add(new LatLon(lat-trig*r, lon-trig*r));		//5 lower left
+		points.add(new LatLon(lat-r, lon));					//6 left
+		points.add(new LatLon(lat-trig*r, lon+trig*r));		//7 upper left
+		GoogleMapPolygon poly = new GoogleMapPolygon(points);
+		if(mag<=0){
+			//sets colors to blue
+			poly.setFillColor("#0000FF");
+			poly.setStrokeColor("#0000FF");
+		} else if(mag<=3){
+			//sets colors to green
+			poly.setFillColor("#00FF00");
+			poly.setStrokeColor("#00FF00");
+		} else if(mag<=7){
+			//sets colors to yellow
+			poly.setFillColor("#FFFF00");
+			poly.setStrokeColor("#FFFF00");
+		} else{
+			//sets colors to red
+			poly.setFillColor("#FF0000");
+			poly.setStrokeColor("#FF0000");
+		}
+		poly.setFillOpacity(.35);
+		poly.setStrokeOpacity(.8);
+		googleMap.addPolygonOverlay(poly);
+		polygons.add(poly);
 	}
 	public VerticalLayout getLayout() {
 		return layout;
