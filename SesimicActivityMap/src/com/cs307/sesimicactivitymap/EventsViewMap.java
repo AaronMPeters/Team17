@@ -124,7 +124,7 @@ public class EventsViewMap {
 			
 		}
 		*/
-		/*
+		
 		GoogleMapMarker [] seisEvents = new GoogleMapMarker[12];
 		Random rn = new Random();
 		for(int i = 0; i < 12; i++){
@@ -138,7 +138,7 @@ public class EventsViewMap {
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, seisEvents[i], win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);
-		}*/
+		}
 	}
 	
 	public void makePoly(double lat, double lon, double mag){
