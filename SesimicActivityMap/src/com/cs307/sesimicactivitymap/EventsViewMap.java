@@ -24,12 +24,14 @@ public class EventsViewMap {
 	VerticalLayout layout;
 	HorizontalLayout buttons;
 	HorizontalLayout sliderarea;
+	HorizontalLayout listarea;
 	GoogleMap googleMap;
 	private EntityManager em;
 
 	Button button1;
 	Button button2;
 	Button button3;
+	Button button4;
 	Slider sliderbar;
 	Button sliderbutton;
 	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
@@ -41,16 +43,20 @@ public class EventsViewMap {
 		this.events = events;
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
+		this.listarea = new HorizontalLayout();
 		this.button1 = new Button("Seimic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
+		this.button4 = new Button("Events List");
 		this.sliderbutton = new Button ("Filter");
 		this.sliderbar = new Slider(1, 10000);
 		
 		button1.setHeight("100%");
 		button2.setHeight("100%");
 		button3.setHeight("100%");
+		button4.setHeight("100%");
 		sliderbar.setHeight("100%");
+		listarea.setHeight("100%");
 		sliderbutton.setHeight("100%");
 		sliderarea.setWidth("100%");
 		sliderbar.setOrientation(SliderOrientation.HORIZONTAL);
@@ -64,8 +70,10 @@ public class EventsViewMap {
 		sliderarea.addComponent(sliderbar);
 		sliderarea.addComponent(sliderbutton);
 		buttons.addComponent(button1);		
-		buttons.addComponent(button2);
+		buttons.addComponent(listarea);
+		listarea.addComponent(button2);
 		buttons.addComponent(button3);
+		listarea.addComponent(button4);
 		buttons.addComponent(sliderarea);
 		buttons.setWidth("100%");
 		layout.addComponent(buttons);
