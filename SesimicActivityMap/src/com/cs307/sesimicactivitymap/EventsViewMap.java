@@ -73,37 +73,7 @@ public class EventsViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
-		
-		double [] lat = {
-				34.50399, 
-				47.60657, 
-				30.2240747, 
-				42.652016, 
-				41.139455, 
-				35.084623, 
-				41.878247, 
-				37.7756, 
-				46.003962, 
-				40.807084, 
-				44.519358, 
-				21.30891, 
-
-			
-		};
-		double [] lon = {
-				-96.94965,
-				-122.33180,
-				-92.0198637,
-				-73.755054,
-				-104.821064,
-				-106.651178,
-				-87.629767,
-				-122.4193,
-				-112.534456,
-				-96.682386,
-				-88.019972,
-				-157.85752
-		};
+	
 		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
 		em.getTransaction().begin();
 		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
@@ -115,7 +85,7 @@ public class EventsViewMap {
 			GoogleMapMarker event = new GoogleMapMarker("events_"+s.getId(),new LatLon(latitude, longitude),false);
 			googleMap.addMarker(event);
 			
-			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", event);
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Intensity:"+s.getIntensity()+"--Date:"+s.getTime_stamp(), event);
 			
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, event, win);
@@ -126,86 +96,10 @@ public class EventsViewMap {
 		
 	
 		em.getTransaction().commit();
-		//System.out.println(events.getItemIds());
-		/*
-		int item;
-		Iterator<Object> o = events.getItemIds().iterator();
-		while(o.hasNext()){
 		
-			item = (Integer) o.next();
-			System.out.println(item);
-			Item item2 = events.getItem(item);
-			String in = (String) item2.getItemProperty("intensity").getValue();
-			double intensity = Double.parseDouble(in);
-			if(intensity>2){
-			double latitude = (Double) item2.getItemProperty("latitude").getValue();
-			double longitude = (Double) item2.getItemProperty("longitude").getValue();
-			GoogleMapMarker  event = new GoogleMapMarker("events_"+(Integer)item2.getItemProperty("id").getValue(),new LatLon(latitude,longitude),false);
-			googleMap.addMarker(event);
-			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", event);
-			
-			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
-	                googleMap, event, win);
-	        googleMap.addMarkerClickListener(infoWindowOpener);
-			}
-			if(item==500){
-				break;
-			}
-			
-		}
-		*/
 		
-		GoogleMapMarker [] seisEvents = new GoogleMapMarker[12];
-		Random rn = new Random();
-		for(int i = 0; i < 12; i++){
-			int rating = rn.nextInt(10) + 1;
-			seisEvents[i] = new GoogleMapMarker(Integer.toString(rating), new LatLon(lat[i], lon[i]), false);
-			googleMap.addMarker(seisEvents[i]);
-			makePoly (lat[i], lon[i], 2);
-
-			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", seisEvents[i]);
-			
-			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
-	                googleMap, seisEvents[i], win);
-	        googleMap.addMarkerClickListener(infoWindowOpener);
-		}
 	}
 	
-	public void makePoly(double lat, double lon, double mag){
-		double trig = 0.70710678118;	//equivalent to cos(45) and sin(45)
-		double r = mag*.4 + .5;	//radius determined by magnitude
-		ArrayList<LatLon> points = new ArrayList<LatLon>();
-		points.add(new LatLon(lat, lon+r));					//0 top
-		points.add(new LatLon(lat+trig*r, lon+trig*r));		//1 upper right
-		points.add(new LatLon(lat+r, lon));					//2 right
-		points.add(new LatLon(lat+trig*r, lon-trig*r));		//3 lower right
-		points.add(new LatLon(lat, lon-r));					//4 bottom
-		points.add(new LatLon(lat-trig*r, lon-trig*r));		//5 lower left
-		points.add(new LatLon(lat-r, lon));					//6 left
-		points.add(new LatLon(lat-trig*r, lon+trig*r));		//7 upper left
-		GoogleMapPolygon poly = new GoogleMapPolygon(points);
-		if(mag<=0){
-			//sets colors to blue
-			poly.setFillColor("#0000FF");
-			poly.setStrokeColor("#0000FF");
-		} else if(mag<=3){
-			//sets colors to green
-			poly.setFillColor("#00FF00");
-			poly.setStrokeColor("#00FF00");
-		} else if(mag<=7){
-			//sets colors to yellow
-			poly.setFillColor("#FFFF00");
-			poly.setStrokeColor("#FFFF00");
-		} else{
-			//sets colors to red
-			poly.setFillColor("#FF0000");
-			poly.setStrokeColor("#FF0000");
-		}
-		poly.setFillOpacity(.35);
-		poly.setStrokeOpacity(.8);
-		googleMap.addPolygonOverlay(poly);
-		polygons.add(poly);
-	}
 
 	public VerticalLayout getLayout() {
 		return layout;
