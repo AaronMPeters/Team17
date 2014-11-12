@@ -10,6 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import java.math.*;
 
 public class SesimicActicityMap {
 	VerticalLayout layout;
@@ -32,16 +33,25 @@ public class SesimicActicityMap {
 		polyCount++;
 		double trig = 0.70710678118;	//equivalent to cos(45) and sin(45)
 		double r = mag*.4 + .5;	//radius determined by magnitude
+		String color;
 		ArrayList<LatLon> points = new ArrayList<LatLon>();
-		points.add(new LatLon(lat, lon+r));					//0 top
-		points.add(new LatLon(lat+trig*r, lon+trig*r));		//1 upper right
-		points.add(new LatLon(lat+r, lon));					//2 right
-		points.add(new LatLon(lat+trig*r, lon-trig*r));		//3 lower right
-		points.add(new LatLon(lat, lon-r));					//4 bottom
-		points.add(new LatLon(lat-trig*r, lon-trig*r));		//5 lower left
-		points.add(new LatLon(lat-r, lon));					//6 left
-		points.add(new LatLon(lat-trig*r, lon+trig*r));		//7 upper left
+		for (int i = 0; i <= 360; i++) {
+			points.add(new LatLon(lat + r * Math.cos(((double)i / 180) * Math.PI), lon + r * Math.sin(((double)i / 180) * Math.PI)));
+		}
+
 		GoogleMapPolygon poly = new GoogleMapPolygon(points);
+		poly.setGeodesic(true);
+		color = getColor(mag);
+		poly.setFillColor(color);
+		poly.setStrokeColor(color);
+		poly.setFillOpacity(.35);
+		poly.setStrokeOpacity(.8);
+		googleMap.addPolygonOverlay(poly);
+		polygons.add(poly);
+	}
+	
+	public String getColor(double mag) {
+		String color = "#";
 		int red, green, blue;
 		red = 255;
 		green = 255;
@@ -51,21 +61,16 @@ public class SesimicActicityMap {
 		} else if (mag >= 6.5){
 			green = (int)((double)(10 - mag) * 255 / 3.5) ;
 		} else {
-			red = (int) (mag) * 255 / 3;
-			green = (int) (mag) * 255 / 3;
+			red = (int) (3 - mag) * 255 / 3;
+			green = (int) (3 - mag) * 255 / 3;
 			blue = 255;
 		}
-		String color = "#";
 		color = (red == 0) ? color.concat("00") : color.concat(Integer.toHexString(red));
 		color = (green == 0) ? color.concat("00") : color.concat(Integer.toHexString(green));
 		color = (blue == 0) ? color.concat("00"): color.concat(Integer.toHexString(blue));
 		System.out.println("Color for polygon[" + polyCount + "], is " + color + " " + red + " " + green);
-		poly.setFillColor(color);
-		poly.setStrokeColor(color);
-		poly.setFillOpacity(.35);
-		poly.setStrokeOpacity(.8);
-		googleMap.addPolygonOverlay(poly);
-		polygons.add(poly);
+		return color;
+		
 	}
 	
 	public SesimicActicityMap (){
