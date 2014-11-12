@@ -74,36 +74,7 @@ public class EventsViewMap {
 		layout.setSizeFull();
 		layout.setHeightUndefined();
 		
-		double [] lat = {
-				34.50399, 
-				47.60657, 
-				30.2240747, 
-				42.652016, 
-				41.139455, 
-				35.084623, 
-				41.878247, 
-				37.7756, 
-				46.003962, 
-				40.807084, 
-				44.519358, 
-				21.30891, 
-
-			
-		};
-		double [] lon = {
-				-96.94965,
-				-122.33180,
-				-92.0198637,
-				-73.755054,
-				-104.821064,
-				-106.651178,
-				-87.629767,
-				-122.4193,
-				-112.534456,
-				-96.682386,
-				-88.019972,
-				-157.85752
-		};
+		
 		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
 		em.getTransaction().begin();
 		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
