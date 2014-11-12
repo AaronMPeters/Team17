@@ -1,7 +1,9 @@
 package com.cs307.sesimicactivitymap;
 
+import com.cs307.database.Seismic_Events;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Item;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
@@ -15,11 +17,16 @@ import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.*;
+
+import javax.management.Query;
+import javax.persistence.*;
 public class EventsViewMap {
 	VerticalLayout layout;
 	HorizontalLayout buttons;
 	HorizontalLayout sliderarea;
 	GoogleMap googleMap;
+	private EntityManager em;
+
 	Button button1;
 	Button button2;
 	Button button3;
@@ -97,6 +104,29 @@ public class EventsViewMap {
 				-88.019972,
 				-157.85752
 		};
+		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
+		em.getTransaction().begin();
+		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
+		Collection co = q.getResultList();
+		for(Iterator i = co.iterator(); i.hasNext();){
+			Seismic_Events s = (Seismic_Events) i.next();
+			double latitude = s.getLatitude();
+			double longitude = s.getLongitude();
+			GoogleMapMarker event = new GoogleMapMarker("events_"+s.getId(),new LatLon(latitude, longitude),false);
+			googleMap.addMarker(event);
+			
+			GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Current Activity: ", event);
+			
+			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+	                googleMap, event, win);
+	        googleMap.addMarkerClickListener(infoWindowOpener);
+
+		}
+		
+		
+	
+		em.getTransaction().commit();
+		//System.out.println(events.getItemIds());
 		/*
 		int item;
 		Iterator<Object> o = events.getItemIds().iterator();

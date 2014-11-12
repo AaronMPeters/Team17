@@ -13,8 +13,8 @@ public class Seismic_Events {
 	private double latitude;
 	private double longitude;
 	private String time_stamp;
-	private String depth;
-	private String intensity;
+	private Double depth;
+	private Double intensity;
 	public int getId() {
 		return id;
 	}
@@ -39,16 +39,16 @@ public class Seismic_Events {
 	public void setTime_stamp(String time_stamp) {
 		this.time_stamp = time_stamp;
 	}
-	public String getDepth() {
+	public Double getDepth() {
 		return depth;
 	}
-	public void setDepth(String depth) {
+	public void setDepth(Double depth) {
 		this.depth = depth;
 	}
-	public String getIntensity() {
+	public Double getIntensity() {
 		return intensity;
 	}
-	public void setIntensity(String intensity) {
+	public void setIntensity(Double intensity) {
 		this.intensity = intensity;
 	}
 	
