@@ -4,22 +4,24 @@ import com.cs307.database.Seismic_Events;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.data.Item;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomLayout;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Slider;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
+import com.vaadin.ui.Window;
 import java.util.*;
 
-import javax.management.Query;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+//import javax.persistence.;
 public class EventsViewMap {
 	VerticalLayout layout;
 	HorizontalLayout buttons;
@@ -27,7 +29,7 @@ public class EventsViewMap {
 	HorizontalLayout listarea;
 	GoogleMap googleMap;
 	private EntityManager em;
-
+	Table table;
 	Button button1;
 	Button button2;
 	Button button3;
@@ -41,6 +43,7 @@ public class EventsViewMap {
 	public EventsViewMap (JPAContainer<?> events){
 		this.layout = new VerticalLayout();
 		this.events = events;
+		this.table = new Table();
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
 		this.listarea = new HorizontalLayout();
@@ -81,11 +84,11 @@ public class EventsViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
-	
+		
 		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
 		em.getTransaction().begin();
 		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
-		Collection co = q.getResultList();
+		final Collection co = q.getResultList();
 		for(Iterator i = co.iterator(); i.hasNext();){
 			Seismic_Events s = (Seismic_Events) i.next();
 			double latitude = s.getLatitude();
@@ -104,6 +107,33 @@ public class EventsViewMap {
 		
 	
 		em.getTransaction().commit();
+		button4.addClickListener(new ClickListener(){
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				Window sub = new Window();
+				VerticalLayout subC = new VerticalLayout();
+				sub.setContent(subC);
+				table.addContainerProperty("ID", Integer.class, null);
+				table.addContainerProperty("Latitude", Double.class, null);
+				table.addContainerProperty("Longtitude", Double.class, null);
+				table.addContainerProperty("Time", String.class, null);
+				table.addContainerProperty("Depth", Double.class, null);
+				table.addContainerProperty("Intensity", Double.class, null);
+				
+				for(Iterator it = co.iterator(); it.hasNext();){
+					Seismic_Events s = (Seismic_Events) it.next();
+					table.addItem(new Object[]{s.getId(),s.getLatitude(),s.getLongitude(),s.getTime_stamp(),s.getDepth(),s.getIntensity() }, null);
+					
+				}
+				subC.addComponent(table);
+				UI.getCurrent().addWindow(sub);
+				sub.center();
+				
+			}
+			
+		});
 		
 		
 	}
