@@ -4,6 +4,8 @@ import com.cs307.database.Seismic_Events;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -13,6 +15,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
@@ -36,10 +39,13 @@ public class EventsViewMap {
 	Button button4;
 	Slider sliderbar;
 	Button sliderbutton;
+	Label warning;
 	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
 
 
 	private JPAContainer<?> events;
+	protected Double value;
+	protected Collection co;
 	public EventsViewMap (JPAContainer<?> events){
 		this.layout = new VerticalLayout();
 		this.events = events;
@@ -52,8 +58,10 @@ public class EventsViewMap {
 		this.button3 = new Button("Sensor View Map");
 		this.button4 = new Button("Events List");
 		this.sliderbutton = new Button ("Filter");
-		this.sliderbar = new Slider(1, 10000);
-		
+		this.sliderbar = new Slider(1, 10);
+		this.warning = new Label();
+		warning.setHeight("100%");
+		warning.setCaption("Warning, intensity 1 lags!");
 		button1.setHeight("100%");
 		button2.setHeight("100%");
 		button3.setHeight("100%");
@@ -65,13 +73,49 @@ public class EventsViewMap {
 		sliderbar.setOrientation(SliderOrientation.HORIZONTAL);
 		sliderbar.setWidth("100%");
 		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
+		
+		
+		sliderbar.addValueChangeListener(new Property.ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				// TODO Auto-generated method stub
+				value = (Double) sliderbar.getValue();
+				System.out.println(value);
+				googleMap.clearMarkers();
+				em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
+				em.getTransaction().begin();
+				javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > "+value+" AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
+				co = q.getResultList();
+				for(Iterator i = co.iterator(); i.hasNext();){
+					Seismic_Events s = (Seismic_Events) i.next();
+					double latitude = s.getLatitude();
+					double longitude = s.getLongitude();
+					GoogleMapMarker event1 = new GoogleMapMarker("events_"+s.getId(),new LatLon(latitude, longitude),false);
+					googleMap.addMarker(event1);
+					
+					GoogleMapInfoWindow win = new GoogleMapInfoWindow ("Intensity:"+s.getIntensity()+"--Date:"+s.getTime_stamp(), event1);
+					
+					OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
+			                googleMap, event1, win);
+			        googleMap.addMarkerClickListener(infoWindowOpener);
 
+				}
+				
+				
+			
+				em.getTransaction().commit();
+				
+				
+				
+			}
+		});
 		googleMap.setWidth("100%");
 		googleMap.setHeight("400px");
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
 		sliderarea.addComponent(sliderbar);
-		sliderarea.addComponent(sliderbutton);
+		sliderarea.addComponent(warning);
 		buttons.addComponent(button1);		
 		buttons.addComponent(listarea);
 		listarea.addComponent(button2);
@@ -84,7 +128,7 @@ public class EventsViewMap {
 		layout.setMargin(true);
 		layout.setSizeFull();
 		layout.setHeightUndefined();
-		
+		/*
 		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
 		em.getTransaction().begin();
 		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
@@ -107,6 +151,8 @@ public class EventsViewMap {
 		
 	
 		em.getTransaction().commit();
+		
+		*/
 		button4.addClickListener(new ClickListener(){
 
 			@Override
@@ -121,12 +167,17 @@ public class EventsViewMap {
 				table.addContainerProperty("Time", String.class, null);
 				table.addContainerProperty("Depth", Double.class, null);
 				table.addContainerProperty("Intensity", Double.class, null);
-				
-				for(Iterator it = co.iterator(); it.hasNext();){
+				table.removeAllItems();
+				em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
+				em.getTransaction().begin();
+				javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > "+value+" AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
+				Collection co1 = q.getResultList();
+				for(Iterator it = co1.iterator(); it.hasNext();){
 					Seismic_Events s = (Seismic_Events) it.next();
 					table.addItem(new Object[]{s.getId(),s.getLatitude(),s.getLongitude(),s.getTime_stamp(),s.getDepth(),s.getIntensity() }, null);
 					
 				}
+			em.getTransaction().commit();
 				subC.addComponent(table);
 				UI.getCurrent().addWindow(sub);
 				sub.center();
@@ -134,6 +185,8 @@ public class EventsViewMap {
 			}
 			
 		});
+		
+		
 		
 		
 	}
