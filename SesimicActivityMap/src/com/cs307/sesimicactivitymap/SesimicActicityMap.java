@@ -1,6 +1,11 @@
 package com.cs307.sesimicactivitymap;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.cs307.database.Seismic_Events;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.tapio.googlemaps.GoogleMap;
 import com.vaadin.tapio.googlemaps.client.LatLon;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
@@ -12,15 +17,19 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import java.math.*;
 
+import javax.persistence.EntityManager;
+
 public class SesimicActicityMap {
 	VerticalLayout layout;
-	HorizontalLayout buttons;
+	HorizontalLayout buttons; 
+	
 	GoogleMap googleMap;
 	Button button1;
 	Button button2;
 	Button button3;
 	ArrayList<GoogleMapPolygon> polygons = new ArrayList<GoogleMapPolygon>();
 	private int polyCount = 0;
+	private EntityManager em;
 	
 	/*
 	 * Draw a colored polygon to the map
@@ -68,7 +77,6 @@ public class SesimicActicityMap {
 		color = (red == 0) ? color.concat("00") : color.concat(Integer.toHexString(red));
 		color = (green == 0) ? color.concat("00") : color.concat(Integer.toHexString(green));
 		color = (blue == 0) ? color.concat("00"): color.concat(Integer.toHexString(blue));
-		System.out.println("Color for polygon[" + polyCount + "], is " + color + " " + red + " " + green);
 		return color;
 		
 	}
@@ -84,9 +92,6 @@ public class SesimicActicityMap {
 		this.button1 = new Button("Seimic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
-		//button1.setWidth("100%");
-		//button2.setWidth("100%");
-		//button3.setWidth("100%");
 		buttons.addComponent(button1);		
 		buttons.addComponent(button2);
 		buttons.addComponent(button3);
@@ -97,15 +102,16 @@ public class SesimicActicityMap {
 		layout.setSizeFull();
 		layout.setHeightUndefined();
 		
-		//Make a few map zones to demonstrate awesome new function
-		makePoly(40.0, -86.0, 0);
-		makePoly(36.0, -120.0, 10);
-		makePoly(41.0, -74.0, 4.3);
-		makePoly(38.0, -90.0, 5);
-		makePoly(32.76, -96.79, 7.0);
-		makePoly(44.3, -110.2, 6.7);
-		makePoly(41.0, -86.0, 1);
-		makePoly(42.0, -86.0, 2);
+		em = JPAContainerFactory.createEntityManagerForPersistenceUnit("SAM");
+		em.getTransaction().begin();
+		javax.persistence.Query q =  em.createQuery("SELECT c FROM Seismic_Events c WHERE c.intensity > 3.0 AND c.latitude > 22.5 AND c.latitude < 50 AND c.longitude < -60 AND c.longitude > -130");
+		final Collection co = q.getResultList();
+		for(Iterator i = co.iterator(); i.hasNext();){
+			Seismic_Events s = (Seismic_Events) i.next();
+			double latitude = s.getLatitude();
+			double longitude = s.getLongitude();
+			makePoly(latitude, longitude, s.getIntensity());
+		}
 		
 	}
 	public VerticalLayout getLayout() {
