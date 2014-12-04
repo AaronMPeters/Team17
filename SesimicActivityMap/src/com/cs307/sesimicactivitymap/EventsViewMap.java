@@ -53,7 +53,7 @@ public class EventsViewMap {
 		this.buttons = new HorizontalLayout();
 		this.sliderarea = new HorizontalLayout();
 		this.listarea = new HorizontalLayout();
-		this.button1 = new Button("Seimic Activity Map");
+		this.button1 = new Button("Seismic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
 		this.button4 = new Button("Events List");
@@ -111,7 +111,7 @@ public class EventsViewMap {
 			}
 		});
 		googleMap.setWidth("100%");
-		googleMap.setHeight("400px");
+		setMapSize();
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
 		sliderarea.addComponent(sliderbar);
@@ -191,7 +191,11 @@ public class EventsViewMap {
 		
 	}
 	
-
+	public void setMapSize() {
+		int height = UI.getCurrent().getPage().getBrowserWindowHeight() - 60;
+		googleMap.setHeight("" + height + "px");
+		return;
+	}
 	public VerticalLayout getLayout() {
 		return layout;
 	}

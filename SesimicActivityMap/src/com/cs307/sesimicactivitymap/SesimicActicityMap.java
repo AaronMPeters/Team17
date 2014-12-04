@@ -13,6 +13,7 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapPolygon;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import java.math.*;
@@ -86,10 +87,10 @@ public class SesimicActicityMap {
 		this.buttons = new HorizontalLayout();
 		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setWidth("100%");
-		googleMap.setHeight("400px");
+		setMapSize();
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
-		this.button1 = new Button("Seimic Activity Map");
+		this.button1 = new Button("Seismic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
 		buttons.addComponent(button1);		
@@ -113,6 +114,11 @@ public class SesimicActicityMap {
 			makePoly(latitude, longitude, s.getIntensity());
 		}
 		
+	}
+	public void setMapSize() {
+		int height = UI.getCurrent().getPage().getBrowserWindowHeight() - 60;
+		googleMap.setHeight("" + height + "px");
+		return;
 	}
 	public VerticalLayout getLayout() {
 		return layout;

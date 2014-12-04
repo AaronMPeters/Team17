@@ -13,6 +13,7 @@ import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapInfoWindow;
 import com.vaadin.tapio.googlemaps.client.overlays.GoogleMapMarker;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class SensorViewMap {
@@ -28,17 +29,18 @@ public class SensorViewMap {
 		this.buttons = new HorizontalLayout();
 		this.googleMap =  new GoogleMap(new LatLon(39.833333, -98.583333), 4, "AIzaSyARW8kBrGU5sRt5rUQY10ggN_SU_jA9jKg");
 		googleMap.setWidth("100%");
-		googleMap.setHeight("400px");
+		setMapSize();
 		googleMap.setMinZoom(4);
 		googleMap.setMaxZoom(16);
 		this.sensors = sensors;
-		this.button1 = new Button("Seimic Activity Map");
+		this.button1 = new Button("Seismic Activity Map");
 		this.button2 = new Button("Events View Map");
 		this.button3 = new Button("Sensor View Map");
 		buttons.addComponent(button1);		
 		buttons.addComponent(button2);
 		buttons.addComponent(button3);
 		buttons.setWidth("100%");
+		buttons.setHeight("100%");
 		layout.addComponent(buttons);
 		layout.addComponent(googleMap);
 		layout.setMargin(true);
@@ -62,10 +64,15 @@ public class SensorViewMap {
 			OpenInfoWindowOnMarkerClickListener infoWindowOpener = new OpenInfoWindowOnMarkerClickListener(
 	                googleMap, sensor, win);
 	        googleMap.addMarkerClickListener(infoWindowOpener);
-			
+
 			
 			
 		}
+	}
+	public void setMapSize() {
+		int height = UI.getCurrent().getPage().getBrowserWindowHeight() - 60;
+		googleMap.setHeight("" + height + "px");
+		return;
 	}
 	public VerticalLayout getLayout() {
 		return layout;

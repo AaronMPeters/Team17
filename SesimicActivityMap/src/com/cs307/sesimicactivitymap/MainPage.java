@@ -13,20 +13,26 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.Page;
+import com.vaadin.server.Page.BrowserWindowResizeEvent;
+import com.vaadin.server.Page.BrowserWindowResizeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 @Theme("sesimicactivitymap")
 public class MainPage extends UI {
-
+	
+	public int currentPage;
 	public static final String PERSISTENCE_UNIT = "SAM";
 	private JPAContainer<Sensor> sensors;
 	private JPAContainer<Seismic_Events> events;
@@ -46,6 +52,7 @@ public class MainPage extends UI {
 		final SensorViewMap third = new SensorViewMap(sensors);
 		//System.out.println(sensors.geti);
 		setContent(first.getLayout());
+		currentPage = 1;
 		
 	//	sensorTable = new Table(null,sensors);
 		
@@ -55,50 +62,72 @@ public class MainPage extends UI {
 		first.getButton1().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(first.getLayout());
+				currentPage = 1;
 			}
 		});
 		first.getButton2().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(second.getLayout());
+				currentPage = 2;
 			}
 		});
 		first.getButton3().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(third.getLayout());
+				currentPage = 3;
 			}
 		});
 		second.getButton1().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(first.getLayout());
+				currentPage = 1;
 			}
 		});
 		second.getButton2().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(second.getLayout());
+				currentPage = 2;
 			}
 		});
 		second.getButton3().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(third.getLayout());
+				currentPage = 3;
 			}
 		});
 		third.getButton1().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(first.getLayout());
+				currentPage = 1;
 			}
 		});
 		third.getButton2().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(second.getLayout());
+				currentPage = 2;
 			}
 		});
 		third.getButton3().addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				setContent(third.getLayout());
+				currentPage = 3;
 			}
 		});
-
 		
+		//new Listener resizeListener = Page.BrowserWindowResizeListener;
+		Page.getCurrent().addBrowserWindowResizeListener(new Page.BrowserWindowResizeListener() {
+		    @Override
+		    public void browserWindowResized(BrowserWindowResizeEvent event) {
+		    	if (currentPage == 1) {
+		    		first.setMapSize();
+		    	} else if (currentPage == 2) {
+		    		second.setMapSize();
+		    	} else if (currentPage == 3) {
+		    		third.setMapSize();
+		    	}
+		        Notification.show("Browser resized to "+event.getWidth()+"x"+event.getHeight());
+		    }
+		});
 	}
 
 }
